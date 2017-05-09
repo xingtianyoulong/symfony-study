@@ -1,0 +1,4 @@
+services:
+#    jootop_admin.example:
+#        class: Jootop\AdminBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

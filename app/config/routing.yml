@@ -1,3 +1,8 @@
+jootop_admin:
+    resource: "@JootopAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
