@@ -186,6 +186,9 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
+
+            $logger = $this->get('logger');
+            $logger->info('I just got the logger');
         
             return $this->redirectToRoute('homepage');
         }
