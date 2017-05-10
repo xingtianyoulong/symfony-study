@@ -4,7 +4,11 @@ namespace Jootop\AdminBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use Jootop\AdminBundle\Entity\Product;
 
@@ -149,5 +153,45 @@ class DefaultController extends Controller
         $em->flush();
      
         return $this->redirectToRoute('homepage');
+    }
+
+    /**
+     * @Route("admin/product/new")
+     */
+    public function newAction(Request $request)
+    {
+        // Create a product and give it some dummy data for this example
+        $product = new Product();
+        $product->setName('New Product Name 2');
+        $product->setPrice('88.88');
+        $product->setDescription('Hello World');
+        
+        $form = $this->createFormBuilder($product)
+            ->add('name', TextType::class)
+            ->add('price', MoneyType::class)
+            ->add('description', TextType::class)
+            ->add('save', SubmitType::class, array('label' => 'Create Product'))
+            ->getForm();
+
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+        
+            // $form->getData() holds the submitted values
+            // But, the original `$task` variable has also been updated
+            $product = $form->getData();
+        
+            // Perform some action, such as saving the task to the database
+            // For example, if Task is a Doctrine entity, save it!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
+        
+            return $this->redirectToRoute('homepage');
+        }
+        
+        return $this->render('default/new.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 }
